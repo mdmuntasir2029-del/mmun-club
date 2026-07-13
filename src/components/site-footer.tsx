@@ -22,7 +22,7 @@ export function SiteFooter() {
           <div className="mt-5 space-y-1 text-sm text-white/70">
             <p className="font-semibold text-white">School Address</p>
             <p>Manarat Dhaka International School and College</p>
-            <p>Road 7, Sector 7, Uttara, Dhaka, Bangladesh</p>
+            <p>H.No 16, Road No. 104, Gulshan 2, Dhaka 1212</p>
           </div>
 
           <div className="mt-5">
