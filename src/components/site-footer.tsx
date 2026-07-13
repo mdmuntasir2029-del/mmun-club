@@ -86,7 +86,9 @@ export function SiteFooter() {
           © {new Date().getFullYear()} MMUNC — Manarat Dhaka International
           School and College. All rights reserved.
         </p>
-        <p className="mt-1">Developed by - Muntasir B28</p>
+        <p className="mt-1">
+          Developed by - <span className="text-blue-300">Muntasir Zaman B28</span>
+        </p>
       </div>
     </footer>
   );
