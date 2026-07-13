@@ -15,8 +15,8 @@ export function SiteHeaderClient({ isSignedIn }: { isSignedIn: boolean }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-mmunc-green shadow-md">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-mmunc-green">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
         <Link
           href="/"
           className="flex items-center gap-2 font-heading text-lg font-bold text-white"
@@ -48,7 +48,7 @@ export function SiteHeaderClient({ isSignedIn }: { isSignedIn: boolean }) {
           {isSignedIn ? (
             <Link
               href="/dashboard"
-              className="rounded-md bg-mmunc-gold px-4 py-2 text-sm font-semibold text-mmunc-green-dark transition hover:bg-mmunc-gold-light"
+              className="bg-mmunc-gold px-4 py-2 text-sm font-semibold tracking-wide text-mmunc-green-dark transition hover:bg-mmunc-gold-light"
             >
               My Dashboard
             </Link>
@@ -62,7 +62,7 @@ export function SiteHeaderClient({ isSignedIn }: { isSignedIn: boolean }) {
               </Link>
               <Link
                 href="/signup"
-                className="rounded-md bg-mmunc-gold px-4 py-2 text-sm font-semibold text-mmunc-green-dark transition hover:bg-mmunc-gold-light"
+                className="bg-mmunc-gold px-4 py-2 text-sm font-semibold tracking-wide text-mmunc-green-dark transition hover:bg-mmunc-gold-light"
               >
                 Sign Up
               </Link>

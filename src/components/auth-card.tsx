@@ -14,14 +14,14 @@ export function AuthCard({
 }) {
   return (
     <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-mmunc-platinum px-4 py-16">
-      <div className="w-full max-w-md rounded-2xl border border-mmunc-green/10 bg-white p-8 shadow-sm">
+      <div className="w-full max-w-md border border-mmunc-green/10 bg-white p-10">
         <Link
           href="/"
-          className="text-xs font-semibold uppercase tracking-wider text-mmunc-gold-dark"
+          className="text-xs font-semibold uppercase tracking-[0.2em] text-mmunc-gold-dark"
         >
           MMUNC
         </Link>
-        <h1 className="mt-2 font-heading text-2xl font-bold text-mmunc-green">
+        <h1 className="mt-3 font-heading text-3xl font-bold tracking-tight text-mmunc-green">
           {title}
         </h1>
         {subtitle && <p className="mt-1 text-sm text-gray-500">{subtitle}</p>}
@@ -45,7 +45,7 @@ export function AuthInput({
       </span>
       <input
         {...props}
-        className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-mmunc-green focus:outline-none focus:ring-1 focus:ring-mmunc-green"
+        className="w-full border border-gray-300 px-3 py-2.5 text-sm text-gray-900 focus:border-mmunc-green focus:outline-none focus:ring-1 focus:ring-mmunc-green"
       />
     </label>
   );

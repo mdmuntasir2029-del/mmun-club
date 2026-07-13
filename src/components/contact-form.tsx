@@ -49,14 +49,14 @@ export function ContactForm() {
           type="text"
           placeholder="Your name"
           required
-          className="w-full rounded-md border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/50 focus:border-mmunc-gold focus:outline-none"
+          className="w-full border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/50 focus:border-mmunc-gold focus:outline-none"
         />
         <input
           name="email"
           type="email"
           placeholder="Your email"
           required
-          className="w-full rounded-md border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/50 focus:border-mmunc-gold focus:outline-none"
+          className="w-full border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/50 focus:border-mmunc-gold focus:outline-none"
         />
       </div>
       <textarea
@@ -64,12 +64,12 @@ export function ContactForm() {
         placeholder="Your message"
         required
         rows={3}
-        className="w-full rounded-md border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/50 focus:border-mmunc-gold focus:outline-none"
+        className="w-full border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/50 focus:border-mmunc-gold focus:outline-none"
       />
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="self-start rounded-md bg-mmunc-gold px-5 py-2 text-sm font-semibold text-mmunc-green-dark transition hover:bg-mmunc-gold-light disabled:opacity-60"
+        className="self-start bg-mmunc-gold px-5 py-2.5 text-sm font-semibold tracking-wide text-mmunc-green-dark transition hover:bg-mmunc-gold-light disabled:opacity-60"
       >
         {status === "submitting" ? "Sending..." : "Send Message"}
       </button>
