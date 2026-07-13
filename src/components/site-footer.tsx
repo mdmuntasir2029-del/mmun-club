@@ -82,8 +82,11 @@ export function SiteFooter() {
       </div>
 
       <div className="border-t border-white/10 py-5 text-center text-xs text-white/50">
-        © {new Date().getFullYear()} MMUNC — Manarat Dhaka International
-        School and College. All rights reserved.
+        <p>
+          © {new Date().getFullYear()} MMUNC — Manarat Dhaka International
+          School and College. All rights reserved.
+        </p>
+        <p className="mt-1">Developed by - Muntasir B28</p>
       </div>
     </footer>
   );
