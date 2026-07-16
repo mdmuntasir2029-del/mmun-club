@@ -20,8 +20,13 @@ and Supabase (auth + database).
    instead of emailing a confirmation link — the confirmation email flow
    was pointing at `localhost` and never worked in production. (Password
    reset still uses email and still works — that's a separate flow.)
-4. Go to **Project Settings → API** and copy the **Project URL** and
-   **anon public key**.
+4. Go to **Project Settings → API Keys** and copy:
+   - The **Project URL**
+   - The **Publishable key** (`sb_publishable_...`) — safe to expose publicly
+   - The **Secret key** (`sb_secret_...`) — **never expose this one**. It
+     grants full admin access to your database and auth users, bypassing
+     every security rule. It's only used server-side, by the admin panel,
+     to reset passwords and ban/unban accounts.
 
 ## 2. Configure environment variables
 
@@ -33,8 +38,14 @@ cp .env.local.example .env.local
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-public-key
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-publishable-key
+SUPABASE_SERVICE_ROLE_KEY=your-secret-key
 ```
+
+`SUPABASE_SERVICE_ROLE_KEY` must **not** have the `NEXT_PUBLIC_` prefix —
+that prefix is what tells Next.js "bundle this into the browser," which
+would leak full admin access to every visitor. Without the prefix, it's
+only readable on the server.
 
 ## 3. Run the dev server
 
@@ -49,9 +60,15 @@ Open [http://localhost:3000](http://localhost:3000).
 
 Sign in with **auraboy161@gmail.com** and go to `/dashboard/admin` (an
 "Admin" tab appears next to "Overview" and "Events" once signed in with
-that account). From there you can see every delegate's sign-up info and
-assign their committee, country/portfolio, and payment status — no need
-to touch the Supabase dashboard for day-to-day allocation.
+that account). From there you can see every delegate's sign-up info,
+assign their committee, country/portfolio, and payment status, force-set
+a new password for their account, and ban/unban them — no need to touch
+the Supabase dashboard for day-to-day management.
+
+Note: nobody — not you, not Supabase — can ever *see* a member's actual
+password. Passwords are one-way hashed, which is what makes them secure.
+"Reset" sets a brand-new password you choose; it doesn't reveal the old
+one.
 
 To add more admins later, edit `ADMIN_EMAIL` in
 [`src/lib/admin.ts`](src/lib/admin.ts) and the two `auraboy161@gmail.com`
@@ -85,5 +102,6 @@ policies in the SQL files under `supabase/`.
 ## Deploying
 
 The easiest option is [Vercel](https://vercel.com/new) — connect this
-repo and add the two `NEXT_PUBLIC_SUPABASE_*` environment variables in
-the project settings.
+repo and add all three environment variables (`NEXT_PUBLIC_SUPABASE_URL`,
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`) in the
+project settings. Redeploy after adding them.
