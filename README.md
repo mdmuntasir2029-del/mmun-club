@@ -13,9 +13,11 @@ and Supabase (auth + database).
    - **Already ran an older version of this project's schema:** run the
      migration scripts in `supabase/` **in filename order** instead —
      currently
-     [`migration-2026-07-16-student-code-admin.sql`](supabase/migration-2026-07-16-student-code-admin.sql)
+     [`migration-2026-07-16-student-code-admin.sql`](supabase/migration-2026-07-16-student-code-admin.sql),
      then
-     [`migration-2026-07-16-grade-and-unique-code.sql`](supabase/migration-2026-07-16-grade-and-unique-code.sql).
+     [`migration-2026-07-16-grade-and-unique-code.sql`](supabase/migration-2026-07-16-grade-and-unique-code.sql),
+     then
+     [`migration-2026-07-16-email-exists-check.sql`](supabase/migration-2026-07-16-email-exists-check.sql).
      Each one updates the existing tables in place without touching
      existing rows (the second one defaults any existing delegate's grade
      to "9" — fix that manually in the admin panel afterwards for anyone
@@ -84,6 +86,12 @@ joined the school, the last 5 are a serial number (e.g. `202600001` =
 joined 2026, serial 1). Codes must be unique — sign-up checks this and
 shows a friendly error if a code is already taken. The admin panel shows
 the decoded joining year next to each code.
+
+**Sign-in** shows "No account found, Sign up" when someone tries to log
+in with an email that isn't registered, instead of a generic error. This
+requires a small public check (`email_has_account`) that technically
+reveals whether an email is registered on the site — a reasonable
+trade-off for a school club, but worth knowing.
 
 ## 5. Replace placeholder content
 

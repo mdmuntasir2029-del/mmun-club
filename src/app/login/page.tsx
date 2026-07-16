@@ -12,7 +12,7 @@ function LoginForm() {
   const next = searchParams.get("next") ?? "/dashboard";
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<React.ReactNode>("");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -28,13 +28,29 @@ function LoginForm() {
       email,
       password,
     });
-    setLoading(false);
 
     if (signInError) {
-      setError("Invalid email or password.");
+      const { data: hasAccount } = await supabase.rpc("email_has_account", {
+        check_email: email,
+      });
+      setLoading(false);
+
+      if (!hasAccount) {
+        setError(
+          <>
+            No account found.{" "}
+            <Link href="/signup" className="font-semibold underline">
+              Sign up
+            </Link>
+          </>
+        );
+      } else {
+        setError("Incorrect password. Please try again.");
+      }
       return;
     }
 
+    setLoading(false);
     router.push(next);
     router.refresh();
   }

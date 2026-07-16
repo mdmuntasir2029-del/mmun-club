@@ -89,6 +89,22 @@ $$;
 
 grant execute on function public.student_code_exists(text) to anon, authenticated;
 
+-- Public "does this email have an account?" check, used by the sign-in
+-- form to show "No account found, sign up" instead of a generic error.
+
+create or replace function public.email_has_account(check_email text)
+returns boolean
+language sql
+security definer set search_path = public
+stable
+as $$
+  select exists (
+    select 1 from auth.users where lower(email) = lower(check_email)
+  );
+$$;
+
+grant execute on function public.email_has_account(text) to anon, authenticated;
+
 -- 3. Contact form submissions --------------------------------------------
 
 create table if not exists public.contact_messages (
