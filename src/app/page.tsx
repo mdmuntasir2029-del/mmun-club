@@ -1,7 +1,23 @@
 import Link from "next/link";
 import { committees } from "@/lib/committees";
+import { createClient } from "@/lib/supabase/server";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let firstName: string | null = null;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("full_name")
+      .eq("id", user.id)
+      .single();
+    firstName = profile?.full_name?.split(" ")[0] || null;
+  }
+
   return (
     <>
       {/* Hero */}
@@ -31,22 +47,35 @@ export default function HomePage() {
           </h1>
 
           <p className="mx-auto mt-6 max-w-md text-base text-white/60 sm:text-lg">
-            Sign in with your account, or sign up
+            {user
+              ? `Welcome back${firstName ? `, ${firstName}` : ""}!`
+              : "Sign in with your account, or sign up"}
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link
-              href="/login"
-              className="w-full border border-mmunc-gold px-8 py-3.5 text-center text-sm font-semibold tracking-wide text-mmunc-gold transition hover:bg-mmunc-gold hover:text-mmunc-green-dark sm:w-auto"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/signup"
-              className="w-full bg-mmunc-gold px-8 py-3.5 text-center text-sm font-semibold tracking-wide text-mmunc-green-dark transition hover:bg-mmunc-gold-light sm:w-auto"
-            >
-              Sign Up
-            </Link>
+            {user ? (
+              <Link
+                href="/dashboard"
+                className="w-full bg-mmunc-gold px-8 py-3.5 text-center text-sm font-semibold tracking-wide text-mmunc-green-dark transition hover:bg-mmunc-gold-light sm:w-auto"
+              >
+                Go to Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="w-full border border-mmunc-gold px-8 py-3.5 text-center text-sm font-semibold tracking-wide text-mmunc-gold transition hover:bg-mmunc-gold hover:text-mmunc-green-dark sm:w-auto"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/signup"
+                  className="w-full bg-mmunc-gold px-8 py-3.5 text-center text-sm font-semibold tracking-wide text-mmunc-green-dark transition hover:bg-mmunc-gold-light sm:w-auto"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </section>
@@ -149,16 +178,18 @@ export default function HomePage() {
       <section className="bg-mmunc-green">
         <div className="mx-auto max-w-4xl px-4 py-24 text-center sm:px-6">
           <h2 className="font-heading text-4xl font-bold tracking-tight text-white sm:text-5xl">
-            Ready to make your voice heard?
+            {user ? "Ready for your next session?" : "Ready to make your voice heard?"}
           </h2>
           <p className="mt-4 text-white/60">
-            Registration is open for this year&apos;s delegates.
+            {user
+              ? "Check your committee, portfolio, and study guide."
+              : "Registration is open for this year's delegates."}
           </p>
           <Link
-            href="/signup"
+            href={user ? "/dashboard" : "/signup"}
             className="mt-8 inline-block bg-mmunc-gold px-8 py-3.5 text-sm font-semibold tracking-wide text-mmunc-green-dark transition hover:bg-mmunc-gold-light"
           >
-            Create Your Account
+            {user ? "Go to Dashboard" : "Create Your Account"}
           </Link>
         </div>
       </section>
