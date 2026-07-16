@@ -4,11 +4,13 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { isAdminEmail } from "@/lib/admin";
 import { committees } from "@/lib/committees";
 import { updateDelegate, resetDelegatePassword, setDelegateBanStatus } from "./actions";
+import { gradeLabel } from "@/lib/grades";
 
 type Profile = {
   id: string;
   full_name: string;
   student_id: string;
+  grade: string | null;
   phone: string | null;
   email: string;
   committee: string | null;
@@ -16,6 +18,11 @@ type Profile = {
   payment_status: string;
   created_at: string;
 };
+
+function joiningYear(studentId: string) {
+  const year = studentId.slice(0, 4);
+  return /^[0-9]{4}$/.test(year) ? year : "—";
+}
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -29,7 +36,7 @@ export default async function AdminPage() {
 
   const { data: profiles } = await supabase
     .from("profiles")
-    .select("id, full_name, student_id, phone, email, committee, country, payment_status, created_at")
+    .select("id, full_name, student_id, grade, phone, email, committee, country, payment_status, created_at")
     .order("created_at", { ascending: false })
     .returns<Profile[]>();
 
@@ -58,12 +65,14 @@ export default async function AdminPage() {
       </p>
 
       <div className="mt-8 overflow-x-auto border border-mmunc-green/10">
-        <table className="w-full min-w-[1400px] border-collapse text-left text-sm">
+        <table className="w-full min-w-[1600px] border-collapse text-left text-sm">
           <thead>
             <tr className="border-b border-mmunc-green/10 bg-mmunc-platinum text-xs font-semibold uppercase tracking-wide text-gray-500">
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Email</th>
               <th className="px-4 py-3">Student Code</th>
+              <th className="px-4 py-3">Joined</th>
+              <th className="px-4 py-3">Grade</th>
               <th className="px-4 py-3">Phone</th>
               <th className="px-4 py-3">Committee</th>
               <th className="px-4 py-3">Country / Portfolio</th>
@@ -89,6 +98,8 @@ export default async function AdminPage() {
                   </td>
                   <td className="px-4 py-3 text-gray-600">{delegate.email}</td>
                   <td className="px-4 py-3 text-gray-600">{delegate.student_id}</td>
+                  <td className="px-4 py-3 text-gray-600">{joiningYear(delegate.student_id)}</td>
+                  <td className="px-4 py-3 text-gray-600">{gradeLabel(delegate.grade)}</td>
                   <td className="px-4 py-3 text-gray-600">{delegate.phone || "—"}</td>
                   <td className="px-4 py-3">
                     <select

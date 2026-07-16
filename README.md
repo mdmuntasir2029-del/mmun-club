@@ -10,11 +10,16 @@ and Supabase (auth + database).
 2. In the Supabase Dashboard, go to **SQL Editor → New query**.
    - **New project, never ran the schema before:** paste the contents of
      [`supabase/schema.sql`](supabase/schema.sql) and run it.
-   - **Already ran the old `schema.sql` on this project:** paste and run
-     [`supabase/migration-2026-07-16-student-code-admin.sql`](supabase/migration-2026-07-16-student-code-admin.sql)
-     instead. It updates the existing tables in place (drops the required
-     institution field, requires a 9-digit student code, and adds the
-     admin panel's database access) without touching existing rows.
+   - **Already ran an older version of this project's schema:** run the
+     migration scripts in `supabase/` **in filename order** instead —
+     currently
+     [`migration-2026-07-16-student-code-admin.sql`](supabase/migration-2026-07-16-student-code-admin.sql)
+     then
+     [`migration-2026-07-16-grade-and-unique-code.sql`](supabase/migration-2026-07-16-grade-and-unique-code.sql).
+     Each one updates the existing tables in place without touching
+     existing rows (the second one defaults any existing delegate's grade
+     to "9" — fix that manually in the admin panel afterwards for anyone
+     it doesn't apply to).
 3. Go to **Authentication → Sign In / Providers → Email** and turn
    **off "Confirm email"**. Sign-up now logs delegates in immediately
    instead of emailing a confirmation link — the confirmation email flow
@@ -74,6 +79,12 @@ To add more admins later, edit `ADMIN_EMAIL` in
 [`src/lib/admin.ts`](src/lib/admin.ts) and the two `auraboy161@gmail.com`
 policies in the SQL files under `supabase/`.
 
+**Student codes** are 9 digits: the first 4 are the year the student
+joined the school, the last 5 are a serial number (e.g. `202600001` =
+joined 2026, serial 1). Codes must be unique — sign-up checks this and
+shows a friendly error if a code is already taken. The admin panel shows
+the decoded joining year next to each code.
+
 ## 5. Replace placeholder content
 
 - **Study guides**: `public/study-guides/*.pdf` are placeholder PDFs.
@@ -96,8 +107,8 @@ policies in the SQL files under `supabase/`.
 - `src/lib/admin.ts` — the hardcoded admin email used to gate `/dashboard/admin`
 - `src/proxy.ts` — refreshes the auth session and protects `/dashboard`
 - `supabase/schema.sql` — database schema for a fresh Supabase project
-- `supabase/migration-2026-07-16-student-code-admin.sql` — schema update
-  for a project that already ran the old `schema.sql`
+- `supabase/migration-*.sql` — schema updates for a project that already
+  ran an older schema version; run in filename order
 
 ## Deploying
 

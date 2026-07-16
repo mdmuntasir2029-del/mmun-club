@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { AuthCard, AuthInput } from "@/components/auth-card";
+import { AuthCard, AuthInput, AuthSelect } from "@/components/auth-card";
+import { GRADE_OPTIONS } from "@/lib/grades";
 
 const STUDENT_CODE_PATTERN = /^[0-9]{9}$/;
 
@@ -21,11 +22,12 @@ export default function SignupPage() {
     const formData = new FormData(event.currentTarget);
     const fullName = String(formData.get("fullName") ?? "").trim();
     const studentId = String(formData.get("studentId") ?? "").trim();
+    const grade = String(formData.get("grade") ?? "");
     const phone = String(formData.get("phone") ?? "").trim();
     const email = String(formData.get("email") ?? "").trim();
     const password = String(formData.get("password") ?? "");
 
-    if (!fullName || !studentId || !email || !password) {
+    if (!fullName || !studentId || !grade || !email || !password) {
       setError("Please fill in all required fields.");
       return;
     }
@@ -43,6 +45,23 @@ export default function SignupPage() {
     setLoading(true);
     const supabase = createClient();
 
+    const { data: alreadyTaken, error: checkError } = await supabase.rpc(
+      "student_code_exists",
+      { code: studentId }
+    );
+
+    if (checkError) {
+      setLoading(false);
+      setError("Something went wrong. Please try again.");
+      return;
+    }
+
+    if (alreadyTaken) {
+      setLoading(false);
+      setError("This student code is already registered.");
+      return;
+    }
+
     const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
@@ -50,6 +69,7 @@ export default function SignupPage() {
         data: {
           full_name: fullName,
           student_id: studentId,
+          grade,
           phone: phone || null,
         },
       },
@@ -58,7 +78,11 @@ export default function SignupPage() {
     setLoading(false);
 
     if (signUpError) {
-      setError(signUpError.message);
+      if (signUpError.message.toLowerCase().includes("student_id")) {
+        setError("This student code is already registered.");
+      } else {
+        setError(signUpError.message);
+      }
       return;
     }
 
@@ -108,6 +132,16 @@ export default function SignupPage() {
           required
           autoComplete="off"
         />
+        <AuthSelect label="Current Grade (2026–2027 session)" name="grade" required defaultValue="">
+          <option value="" disabled>
+            Select your grade
+          </option>
+          {GRADE_OPTIONS.map((g) => (
+            <option key={g.value} value={g.value}>
+              {g.label}
+            </option>
+          ))}
+        </AuthSelect>
         <AuthInput label="Phone Number" name="phone" type="tel" autoComplete="tel" />
         <AuthInput label="Email" name="email" type="email" required autoComplete="email" />
         <AuthInput

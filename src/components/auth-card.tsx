@@ -50,3 +50,23 @@ export function AuthInput({
     </label>
   );
 }
+
+export function AuthSelect({
+  label,
+  children,
+  ...props
+}: React.SelectHTMLAttributes<HTMLSelectElement> & { label: string }) {
+  return (
+    <label className="block">
+      <span className="mb-1 block text-sm font-medium text-gray-700">
+        {label}
+      </span>
+      <select
+        {...props}
+        className="w-full border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-mmunc-green focus:outline-none focus:ring-1 focus:ring-mmunc-green"
+      >
+        {children}
+      </select>
+    </label>
+  );
+}
