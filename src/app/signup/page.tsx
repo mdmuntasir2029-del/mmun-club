@@ -12,8 +12,17 @@ const STUDENT_CODE_PATTERN = /^[0-9]{9}$/;
 export default function SignupPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<React.ReactNode>("");
   const [pendingConfirmation, setPendingConfirmation] = useState(false);
+
+  const emailTakenError = (
+    <>
+      Email already registered.{" "}
+      <Link href="/login" className="font-semibold underline">
+        Log in
+      </Link>
+    </>
+  );
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -62,6 +71,23 @@ export default function SignupPage() {
       return;
     }
 
+    const { data: emailTaken, error: emailCheckError } = await supabase.rpc(
+      "email_has_account",
+      { check_email: email }
+    );
+
+    if (emailCheckError) {
+      setLoading(false);
+      setError("Something went wrong. Please try again.");
+      return;
+    }
+
+    if (emailTaken) {
+      setLoading(false);
+      setError(emailTakenError);
+      return;
+    }
+
     const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
@@ -78,8 +104,11 @@ export default function SignupPage() {
     setLoading(false);
 
     if (signUpError) {
-      if (signUpError.message.toLowerCase().includes("student_id")) {
+      const message = signUpError.message.toLowerCase();
+      if (message.includes("student_id")) {
         setError("This student code is already registered.");
+      } else if (message.includes("already registered") || message.includes("already exists")) {
+        setError(emailTakenError);
       } else {
         setError(signUpError.message);
       }
