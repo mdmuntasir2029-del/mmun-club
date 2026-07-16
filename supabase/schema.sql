@@ -1,16 +1,18 @@
 -- MMUNC website database schema
 -- Run this once in the Supabase project's SQL Editor (Dashboard -> SQL Editor -> New query).
+-- If you already ran an older version of this file, use
+-- supabase/migration-2026-07-16-student-code-admin.sql instead.
 
 -- 1. Delegate profiles ---------------------------------------------------
 -- One row per registered user, created automatically on sign-up.
--- Committee / portfolio / payment_status are set by the secretariat
--- (via the Supabase Table Editor) once a delegate is allocated.
+-- Committee / portfolio / payment_status are set by the admin
+-- (via the /dashboard/admin panel) once a delegate is allocated.
 
 create table if not exists public.profiles (
   id uuid primary key references auth.users (id) on delete cascade,
   full_name text not null,
-  student_id text,
-  institution text not null,
+  student_id text not null check (student_id ~ '^[0-9]{9}$'),
+  institution text,
   phone text,
   email text not null,
   committee text,
@@ -31,6 +33,17 @@ create policy "Users can update their own profile"
   on public.profiles for update
   using (auth.uid() = id);
 
+-- Admin (auraboy161@gmail.com) can view and edit every delegate's profile.
+-- To add more admins, change this to `in ('email-one@x.com', 'email-two@x.com')`.
+
+create policy "Admin can view all profiles"
+  on public.profiles for select
+  using ((auth.jwt() ->> 'email') = 'auraboy161@gmail.com');
+
+create policy "Admin can update all profiles"
+  on public.profiles for update
+  using ((auth.jwt() ->> 'email') = 'auraboy161@gmail.com');
+
 -- 2. Auto-create a profile row whenever someone signs up ----------------
 -- Reads the extra fields passed in supabase.auth.signUp({ options: { data } })
 
@@ -40,12 +53,11 @@ language plpgsql
 security definer set search_path = public
 as $$
 begin
-  insert into public.profiles (id, full_name, student_id, institution, phone, email)
+  insert into public.profiles (id, full_name, student_id, phone, email)
   values (
     new.id,
     coalesce(new.raw_user_meta_data ->> 'full_name', ''),
     new.raw_user_meta_data ->> 'student_id',
-    coalesce(new.raw_user_meta_data ->> 'institution', ''),
     new.raw_user_meta_data ->> 'phone',
     new.email
   );

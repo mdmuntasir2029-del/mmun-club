@@ -1,14 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { AuthCard, AuthInput } from "@/components/auth-card";
 
+const STUDENT_CODE_PATTERN = /^[0-9]{9}$/;
+
 export default function SignupPage() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [pendingConfirmation, setPendingConfirmation] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -17,13 +21,17 @@ export default function SignupPage() {
     const formData = new FormData(event.currentTarget);
     const fullName = String(formData.get("fullName") ?? "").trim();
     const studentId = String(formData.get("studentId") ?? "").trim();
-    const institution = String(formData.get("institution") ?? "").trim();
     const phone = String(formData.get("phone") ?? "").trim();
     const email = String(formData.get("email") ?? "").trim();
     const password = String(formData.get("password") ?? "");
 
-    if (!fullName || !institution || !email || !password) {
+    if (!fullName || !studentId || !email || !password) {
       setError("Please fill in all required fields.");
+      return;
+    }
+
+    if (!STUDENT_CODE_PATTERN.test(studentId)) {
+      setError("Student code must be exactly 9 digits.");
       return;
     }
 
@@ -35,15 +43,13 @@ export default function SignupPage() {
     setLoading(true);
     const supabase = createClient();
 
-    const { error: signUpError } = await supabase.auth.signUp({
+    const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/confirm?next=/dashboard`,
         data: {
           full_name: fullName,
-          student_id: studentId || null,
-          institution,
+          student_id: studentId,
           phone: phone || null,
         },
       },
@@ -56,10 +62,17 @@ export default function SignupPage() {
       return;
     }
 
-    setSuccess(true);
+    if (data.session) {
+      router.push("/dashboard");
+      router.refresh();
+      return;
+    }
+
+    // Email confirmation is still enabled on this Supabase project.
+    setPendingConfirmation(true);
   }
 
-  if (success) {
+  if (pendingConfirmation) {
     return (
       <AuthCard title="Check your email">
         <p className="text-sm text-gray-600">
@@ -86,17 +99,14 @@ export default function SignupPage() {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <AuthInput label="Full Name" name="fullName" type="text" required autoComplete="name" />
         <AuthInput
-          label="Student ID (if internal)"
+          label="Student Code (9 digits)"
           name="studentId"
           type="text"
-          autoComplete="off"
-        />
-        <AuthInput
-          label="Institution"
-          name="institution"
-          type="text"
+          inputMode="numeric"
+          pattern="[0-9]{9}"
+          maxLength={9}
           required
-          placeholder="Manarat Dhaka International School and College"
+          autoComplete="off"
         />
         <AuthInput label="Phone Number" name="phone" type="tel" autoComplete="tel" />
         <AuthInput label="Email" name="email" type="email" required autoComplete="email" />

@@ -27,7 +27,7 @@ export default async function DashboardPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, institution, committee, country, payment_status, study_guide_url")
+    .select("full_name, student_id, committee, country, payment_status, study_guide_url")
     .eq("id", user.id)
     .single();
 
@@ -38,7 +38,7 @@ export default async function DashboardPage() {
   const paymentStatus = profile?.payment_status ?? "pending";
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-24 sm:px-6">
+    <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
       <div className="flex flex-col items-start justify-between gap-4 border-b border-mmunc-green/10 pb-10 sm:flex-row sm:items-center">
         <div>
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-mmunc-gold-dark">
@@ -47,7 +47,9 @@ export default async function DashboardPage() {
           <h1 className="mt-2 font-heading text-4xl font-bold tracking-tight text-mmunc-green">
             Welcome, {profile?.full_name || "Delegate"}
           </h1>
-          <p className="mt-1 text-sm text-gray-500">{profile?.institution}</p>
+          {profile?.student_id && (
+            <p className="mt-1 text-sm text-gray-500">Student Code: {profile.student_id}</p>
+          )}
         </div>
         <SignOutButton />
       </div>

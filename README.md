@@ -7,15 +7,19 @@ and Supabase (auth + database).
 ## 1. Set up Supabase
 
 1. Create a free project at [supabase.com](https://supabase.com).
-2. In the Supabase Dashboard, go to **SQL Editor → New query**, paste the
-   contents of [`supabase/schema.sql`](supabase/schema.sql), and run it.
-   This creates the `profiles` and `contact_messages` tables, sets up
-   row-level security, and adds a trigger that creates a profile row
-   automatically whenever someone signs up.
-3. Go to **Authentication → Emails** and confirm the "Confirm signup" and
-   "Reset password" templates redirect through `/auth/confirm` (the app's
-   confirmation route). The default Supabase templates already work with
-   this project's code.
+2. In the Supabase Dashboard, go to **SQL Editor → New query**.
+   - **New project, never ran the schema before:** paste the contents of
+     [`supabase/schema.sql`](supabase/schema.sql) and run it.
+   - **Already ran the old `schema.sql` on this project:** paste and run
+     [`supabase/migration-2026-07-16-student-code-admin.sql`](supabase/migration-2026-07-16-student-code-admin.sql)
+     instead. It updates the existing tables in place (drops the required
+     institution field, requires a 9-digit student code, and adds the
+     admin panel's database access) without touching existing rows.
+3. Go to **Authentication → Sign In / Providers → Email** and turn
+   **off "Confirm email"**. Sign-up now logs delegates in immediately
+   instead of emailing a confirmation link — the confirmation email flow
+   was pointing at `localhost` and never worked in production. (Password
+   reset still uses email and still works — that's a separate flow.)
 4. Go to **Project Settings → API** and copy the **Project URL** and
    **anon public key**.
 
@@ -41,13 +45,17 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## 4. Allocate delegates (secretariat workflow)
+## 4. Allocate delegates (admin panel)
 
-There's no admin panel yet — once a delegate signs up, allocate their
-committee, country/portfolio, and payment status directly from the
-Supabase Dashboard: **Table Editor → profiles**, edit their row's
-`committee`, `country`, and `payment_status` columns. Their dashboard at
-`/dashboard` updates automatically.
+Sign in with **auraboy161@gmail.com** and go to `/dashboard/admin` (an
+"Admin" tab appears next to "Overview" and "Events" once signed in with
+that account). From there you can see every delegate's sign-up info and
+assign their committee, country/portfolio, and payment status — no need
+to touch the Supabase dashboard for day-to-day allocation.
+
+To add more admins later, edit `ADMIN_EMAIL` in
+[`src/lib/admin.ts`](src/lib/admin.ts) and the two `auraboy161@gmail.com`
+policies in the SQL files under `supabase/`.
 
 ## 5. Replace placeholder content
 
@@ -63,11 +71,16 @@ Supabase Dashboard: **Table Editor → profiles**, edit their row's
 
 ## Project structure
 
-- `src/app` — pages (App Router)
+- `src/app` — pages (App Router). `src/app/dashboard/` holds the
+  member-only Overview, Events, and Admin (`/dashboard/admin`) pages,
+  sharing a tab bar via `src/app/dashboard/layout.tsx`.
 - `src/components` — shared UI (header, footer, auth forms)
 - `src/lib/supabase` — Supabase client/server helpers
+- `src/lib/admin.ts` — the hardcoded admin email used to gate `/dashboard/admin`
 - `src/proxy.ts` — refreshes the auth session and protects `/dashboard`
-- `supabase/schema.sql` — database schema to run in Supabase
+- `supabase/schema.sql` — database schema for a fresh Supabase project
+- `supabase/migration-2026-07-16-student-code-admin.sql` — schema update
+  for a project that already ran the old `schema.sql`
 
 ## Deploying
 
