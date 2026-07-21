@@ -4,7 +4,7 @@ export default function EventsDashboardPage() {
       <span className="text-xs font-semibold uppercase tracking-[0.2em] text-mmunc-gold-dark">
         Delegate Dashboard
       </span>
-      <h1 className="mt-3 font-heading text-4xl font-bold tracking-tight text-mmunc-green">
+      <h1 className="mt-3 font-serif text-4xl font-bold text-mmunc-green">
         Events
       </h1>
       <p className="mx-auto mt-4 max-w-md text-sm text-gray-600">

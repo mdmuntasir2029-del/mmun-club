@@ -20,7 +20,7 @@ export default function AboutPage() {
         <span className="text-xs font-semibold uppercase tracking-[0.2em] text-mmunc-gold-dark">
           About Us
         </span>
-        <h1 className="mt-3 font-heading text-5xl font-bold tracking-tight text-mmunc-green">
+        <h1 className="mt-3 font-serif text-5xl font-bold text-mmunc-green">
           Our History
         </h1>
         <p className="mt-5 leading-relaxed text-gray-600">
@@ -40,12 +40,12 @@ export default function AboutPage() {
       </div>
 
       <div className="mt-24">
-        <h2 className="font-heading text-2xl font-bold tracking-tight text-mmunc-green">
+        <h2 className="font-serif text-2xl font-bold text-mmunc-green">
           Faculty Advisors
         </h2>
         <div className="mt-8 grid gap-px overflow-hidden border border-mmunc-green/10 bg-mmunc-green/10 sm:grid-cols-2">
           <div className="bg-mmunc-platinum p-8">
-            <p className="font-heading text-lg font-bold text-mmunc-green">
+            <p className="font-serif text-lg font-bold text-mmunc-green">
               Faculty Advisor
             </p>
             <p className="mt-2 text-sm text-gray-600">
@@ -54,7 +54,7 @@ export default function AboutPage() {
             </p>
           </div>
           <div className="bg-mmunc-platinum p-8">
-            <p className="font-heading text-lg font-bold text-mmunc-green">
+            <p className="font-serif text-lg font-bold text-mmunc-green">
               Co-Faculty Advisor
             </p>
             <p className="mt-2 text-sm text-gray-600">
@@ -65,7 +65,7 @@ export default function AboutPage() {
       </div>
 
       <div className="mt-24">
-        <h2 className="font-heading text-2xl font-bold tracking-tight text-mmunc-green">
+        <h2 className="font-serif text-2xl font-bold text-mmunc-green">
           Secretariat
         </h2>
         <p className="mt-2 text-sm text-gray-600">
@@ -84,7 +84,7 @@ export default function AboutPage() {
                   .slice(0, 2)
                   .join("")}
               </div>
-              <p className="mt-4 font-heading text-sm font-bold text-mmunc-green">
+              <p className="mt-4 font-serif text-sm font-bold text-mmunc-green">
                 {member.name}
               </p>
               <p className="mt-1 text-xs text-gray-500">{member.role}</p>

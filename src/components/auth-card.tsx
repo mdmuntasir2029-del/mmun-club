@@ -21,7 +21,7 @@ export function AuthCard({
         >
           MMUNC
         </Link>
-        <h1 className="mt-3 font-heading text-3xl font-bold tracking-tight text-mmunc-green">
+        <h1 className="mt-3 font-serif text-3xl font-bold text-mmunc-green">
           {title}
         </h1>
         {subtitle && <p className="mt-1 text-sm text-gray-500">{subtitle}</p>}

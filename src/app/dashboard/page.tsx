@@ -44,7 +44,7 @@ export default async function DashboardPage() {
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-mmunc-gold-dark">
             Delegate Dashboard
           </span>
-          <h1 className="mt-2 font-heading text-4xl font-bold tracking-tight text-mmunc-green">
+          <h1 className="mt-2 font-serif text-4xl font-bold text-mmunc-green">
             Welcome, {profile?.full_name || "Delegate"}
           </h1>
           {profile?.student_id && (
@@ -59,7 +59,7 @@ export default async function DashboardPage() {
           <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
             Allocated Committee
           </p>
-          <p className="mt-3 font-heading text-xl font-bold tracking-tight text-mmunc-green">
+          <p className="mt-3 font-serif text-xl font-bold text-mmunc-green">
             {assignedCommittee?.name || profile?.committee || "Not yet assigned"}
           </p>
           {assignedCommittee && (
@@ -71,7 +71,7 @@ export default async function DashboardPage() {
           <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
             Country / Portfolio
           </p>
-          <p className="mt-3 font-heading text-xl font-bold tracking-tight text-mmunc-green">
+          <p className="mt-3 font-serif text-xl font-bold text-mmunc-green">
             {profile?.country || "Not yet assigned"}
           </p>
         </div>
@@ -89,7 +89,7 @@ export default async function DashboardPage() {
       </div>
 
       <div className="mt-8 border border-mmunc-green/10 bg-white p-8">
-        <h2 className="font-heading text-lg font-bold tracking-tight text-mmunc-green">
+        <h2 className="font-serif text-lg font-bold text-mmunc-green">
           Study Guide
         </h2>
         {studyGuideUrl ? (

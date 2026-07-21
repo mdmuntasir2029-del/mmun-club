@@ -55,7 +55,7 @@ export default async function AdminPage() {
       <span className="text-xs font-semibold uppercase tracking-[0.2em] text-mmunc-gold-dark">
         Admin
       </span>
-      <h1 className="mt-3 font-heading text-3xl font-bold tracking-tight text-mmunc-green">
+      <h1 className="mt-3 font-serif text-3xl font-bold text-mmunc-green">
         Delegates
       </h1>
       <p className="mt-2 text-sm text-gray-600">

@@ -20,7 +20,7 @@ export default function CommitteesPage() {
         <span className="text-xs font-semibold uppercase tracking-[0.2em] text-mmunc-gold-dark">
           This Year&apos;s Lineup
         </span>
-        <h1 className="mt-3 font-heading text-5xl font-bold tracking-tight text-mmunc-green">
+        <h1 className="mt-3 font-serif text-5xl font-bold text-mmunc-green">
           Committees
         </h1>
         <p className="mt-5 leading-relaxed text-gray-600">
@@ -38,7 +38,7 @@ export default function CommitteesPage() {
           >
             <div className="flex items-start justify-between gap-2">
               <div>
-                <h2 className="font-heading text-xl font-bold tracking-tight text-mmunc-green">
+                <h2 className="font-serif text-xl font-bold text-mmunc-green">
                   {committee.name}
                 </h2>
                 <p className="text-sm text-gray-500">{committee.fullName}</p>

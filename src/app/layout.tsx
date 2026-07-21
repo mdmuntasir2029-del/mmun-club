@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Dancing_Script, Inter, Montserrat } from "next/font/google";
+import { Dancing_Script, Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -9,10 +9,10 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+const playfairDisplay = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
+  weight: ["600", "700", "800", "900"],
 });
 
 const dancingScript = Dancing_Script({
@@ -38,7 +38,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${montserrat.variable} ${dancingScript.variable} h-full antialiased`}
+      className={`${inter.variable} ${playfairDisplay.variable} ${dancingScript.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-white text-[var(--foreground)]">
         <SiteHeader />

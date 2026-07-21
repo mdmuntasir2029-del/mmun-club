@@ -19,7 +19,7 @@ export function SiteHeaderClient({ isSignedIn }: { isSignedIn: boolean }) {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
         <Link
           href="/"
-          className="flex items-center gap-2 font-heading text-lg font-bold text-white"
+          className="flex items-center gap-2 font-serif text-lg font-bold text-white"
           onClick={() => setOpen(false)}
         >
           <Image src="/logo.png" alt="MMUNC logo" width={36} height={36} className="h-9 w-9" priority />

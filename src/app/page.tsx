@@ -35,7 +35,7 @@ export default async function HomePage() {
             Manarat Dhaka International School and College
           </span>
 
-          <h1 className="mt-8 font-heading text-5xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-7xl">
+          <h1 className="mt-8 font-serif text-5xl font-extrabold leading-[1.05] text-white sm:text-7xl">
             Feeling{" "}
             <span className="font-script text-6xl font-bold text-mmunc-gold sm:text-8xl">
               diplomatic
@@ -87,7 +87,7 @@ export default async function HomePage() {
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-mmunc-gold-dark">
               About the Club
             </span>
-            <h2 className="mt-3 font-heading text-4xl font-bold tracking-tight text-mmunc-green">
+            <h2 className="mt-3 font-serif text-4xl font-bold text-mmunc-green">
               Where students become diplomats
             </h2>
             <p className="mt-5 leading-relaxed text-gray-600">
@@ -116,7 +116,7 @@ export default async function HomePage() {
                 key={stat.label}
                 className="bg-white px-6 py-10 text-center"
               >
-                <p className="font-heading text-5xl font-extrabold tracking-tight text-mmunc-green">
+                <p className="font-serif text-5xl font-extrabold text-mmunc-green">
                   {stat.value}
                 </p>
                 <p className="mt-2 text-xs font-medium uppercase tracking-wide text-gray-500">
@@ -136,7 +136,7 @@ export default async function HomePage() {
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-mmunc-gold-dark">
                 This Year&apos;s Lineup
               </span>
-              <h2 className="mt-3 font-heading text-4xl font-bold tracking-tight text-mmunc-green">
+              <h2 className="mt-3 font-serif text-4xl font-bold text-mmunc-green">
                 Our Committees
               </h2>
             </div>
@@ -155,7 +155,7 @@ export default async function HomePage() {
                 className="group bg-white p-8 transition hover:bg-mmunc-green"
               >
                 <div className="flex items-center justify-between">
-                  <h3 className="font-heading text-xl font-bold tracking-tight text-mmunc-green group-hover:text-white">
+                  <h3 className="font-serif text-xl font-bold text-mmunc-green group-hover:text-white">
                     {committee.name}
                   </h3>
                   <span className="border border-mmunc-gold/40 px-2.5 py-1 text-xs font-semibold text-mmunc-gold-dark group-hover:text-mmunc-gold">
@@ -177,7 +177,7 @@ export default async function HomePage() {
       {/* Final CTA */}
       <section className="bg-mmunc-green">
         <div className="mx-auto max-w-4xl px-4 py-24 text-center sm:px-6">
-          <h2 className="font-heading text-4xl font-bold tracking-tight text-white sm:text-5xl">
+          <h2 className="font-serif text-4xl font-bold text-white sm:text-5xl">
             {user ? "Ready for your next session?" : "Ready to make your voice heard?"}
           </h2>
           <p className="mt-4 text-white/60">
